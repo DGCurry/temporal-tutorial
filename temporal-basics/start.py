@@ -12,21 +12,21 @@ logging.basicConfig(level=logging.INFO)
 async def main() -> None:
     client = await Client.connect(TEMPORAL_ADDRESS)
 
-    # Unieke workflow-id (mag je ook hardcoderen voor idempotentie)
-    wf_id = f"hello-{uuid4()}"
+    wf_id = str(uuid4())
+
+    arguments = "Your name here"  # change this to your name or any string you like
 
     handle = await client.start_workflow(
-        HelloWorkflow.run,          # entrypoint van je workflow
-        "Diederik",                 # argument voor HelloWorkflow.run
+        HelloWorkflow.run,          
+        arguments,                 
         id=wf_id,
         task_queue=TASK_QUEUE,
     )
 
-    logging.info("Workflow gestart met id: %s", handle.id)
+    logging.info("Workflow started with id: %s", handle.id)
 
-    # Wacht op het resultaat
     result = await handle.result()
-    print("Workflow-resultaat:", result)
+    print("Workflow-result:", result)
 
 if __name__ == "__main__":
     asyncio.run(main())

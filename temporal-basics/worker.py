@@ -3,18 +3,16 @@ import logging
 from temporalio.client import Client
 from temporalio.worker import Worker
 from workflows import HelloWorkflow
-from overview.activities import empty_activity
+from activities import empty_activity
+from start import TASK_QUEUE
 
-TASK_QUEUE = "tutorial-task-queue"
-TEMPORAL_ADDRESS = "localhost:7233"  # Standaard voor lokale Temporal-dev
+TEMPORAL_ADDRESS = "localhost:7233"
 
 logging.basicConfig(level=logging.INFO)
 
 async def main() -> None:
-    # Verbind met de Temporal server
     client = await Client.connect(TEMPORAL_ADDRESS)
 
-    # Start een worker die deze workflow en activity aanbiedt
     worker = Worker(
         client,
         task_queue=TASK_QUEUE,
