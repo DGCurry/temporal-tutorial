@@ -8,7 +8,6 @@ from entities.charge_input import ChargeInput
 from temporalio import activity
 from temporalio.exceptions import ApplicationError
 
-# --- Constants ---
 UPPER_BOUND_RETRY = 4
 HEARTBEAT_SLEEP_SECONDS = 0.5
 MIN_ATTEMPTS_BEFORE_SUCCESS = 3

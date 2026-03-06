@@ -21,7 +21,7 @@ async def main() -> None:
     )
 
     logging.info("Worker gestart; luistert op task queue: %s", TASK_QUEUE)
-    await worker.run()  # Blokkeert tot je het proces stopt (Ctrl+C)
+    await worker.run()
 
 if __name__ == "__main__":
     asyncio.run(main())

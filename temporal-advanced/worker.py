@@ -1,5 +1,6 @@
-import asyncio
+# worker.py
 import logging
+import asyncio
 from temporalio.client import Client
 from temporalio.worker import Worker
 

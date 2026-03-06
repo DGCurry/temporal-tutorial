@@ -14,19 +14,15 @@ async def main() -> None:
 
     wf_id = str(uuid4())
 
-    arguments = "Your name here"  # change this to your name or any string you like
-
-    handle = await client.start_workflow(
-        HelloWorkflow.run,          
-        arguments,                 
-        id=wf_id,
-        task_queue=TASK_QUEUE,
-    )
+    # TODO start the workflow with client.start_workflow
+    # passing in the workflow class, 
+    # and specifying the task queue and a unique workflow id. 
+    # Store the returned handle in a variable called handle.
 
     logging.info("Workflow started with id: %s", handle.id)
 
     result = await handle.result()
-    print("Workflow-result:", result)
+    print(result)
 
 if __name__ == "__main__":
     asyncio.run(main())

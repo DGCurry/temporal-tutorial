@@ -1,4 +1,3 @@
-# workflows.py
 from datetime import timedelta
 from entities.charge_input import ChargeInput
 
@@ -7,15 +6,9 @@ from temporalio.common import RetryPolicy
 
 from activities import charge_customer, ChargeInput
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
 CHARGE_ACTIVITY_TIMEOUT = timedelta(seconds=10)
 CHARGE_ACTIVITY_MAX_ATTEMPTS = 5
 
-# ---------------------------------------------------------------------------
-# CHILD WORKFLOW – PaymentWorkflow
-# ---------------------------------------------------------------------------
 @workflow.defn
 class PaymentWorkflow:
     """Charges the customer. Input → output, delegates side effect to activity."""
