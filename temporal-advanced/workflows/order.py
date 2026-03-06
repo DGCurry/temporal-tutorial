@@ -24,11 +24,12 @@ def make_payment_workflow_id(order_id: str) -> str:
     """Pure: derive the child workflow id."""
     return f"{order_id}{PAYMENT_WORKFLOW_ID_SUFFIX}"
 
+
 def make_order_result(order_id: str) -> str:
     """Pure: build the final result string."""
     return f"{ORDER_RESULT_PREFIX}:{order_id}"
 
-def updated_items_helper(items: Dict[str, int], stock_unit_identifier: str, quantity: int) -> Dict[str, int]:
+def updated_items(items: Dict[str, int], stock_unit_identifier: str, quantity: int) -> Dict[str, int]:
     """Pure: return a new items dict with the given sku set to quantity."""
     if quantity < 0:
         raise ValueError("qty must be >= 0")
@@ -43,51 +44,48 @@ class OrderWorkflow:
         self.state = OrderState(email=email)
 
     # --- Queries: pure reads, no side effects ---
-    # Queries are fast and deterministic
 
-    # You create a query by
-    # @workflow.query
-    # def query_name(self, args) -> return_type:
-    #     # implementation here
+    @workflow.query
+    def get_state(self) -> OrderState:
+        return self.state
 
-    # TODO 1
-    # add a query get_state that returns the current OrderState dataclass instance
+    @workflow.query
+    def is_approved(self) -> bool:
+        return self.state.approved
 
     # --- Signal: single side effect, no return ---
-    # Signals are fire-and-forget, and can be used to unblock wait conditions
-    # You create a signal by
-    # @workflow.signal
-    # async def signal_name(self, args) -> None:
-    #     # implementation here
-    
-    # TODO 2
-    # add a signal approve that sets state.approved to True
 
-    # --- Update: single side effect, returns new value ---
-    # Updates are like signals but return a value. They can be used to change workflow state
-    # You create an update by
-    # @workflow.update
-    # async def update_name(self, args) -> return_type:
-    #     # implementation here
+    @workflow.signal
+    async def approve(self) -> None:
+        self.state.approved = True
 
-    # TODO 3
-    # add an update set_email that updates the email in the state and returns the new email
+    # --- Updates: single mutation + return the new value ---
 
+    @workflow.update
+    async def set_item_quantity(self, stock_unit_identifier: str, quantity: int) -> Dict[str, int]:
+        """Replaces items with an updated copy. Returns the new items dict."""
+        self.state.items = updated_items(self.state.items, stock_unit_identifier, quantity)
+        return self.state.items
+
+    @workflow.update
+    async def set_email(self, address: str) -> str:
+        """Replace the email. Returns the new address."""
+        self.state.email = address
+        return self.state.email
 
     # --- Orchestration steps: each does one thing ---
 
-    
     async def _wait_for_approval(self) -> None:
+        """Side effect: blocks until approved."""
         await workflow.wait_condition(lambda: self.state.approved)
 
     async def _charge_customer(self) -> str:
-        # Fill this in: execute the payment child workflow and return the payment receipt. Hint: use workflow.execute_child_workflow.
-        # The workflow needs 
-        # - the order_id and total price as input arguments,
-        # - a deterministic id (hint: use make_payment_workflow_id) and
-        # - a parent close policy that terminates the child if the parent is closed.
-        #   + See PAYMENT_CHILD_CLOSE_POLICY constant
+        """Input → output: runs child workflow, returns receipt."""
         return await workflow.execute_child_workflow(
+            PaymentWorkflow.run,
+            args=[self.order_id, compute_total_items_price(self.state.items, PRICE_PER_ITEM_EUR)],
+            id=make_payment_workflow_id(self.order_id),
+            parent_close_policy=PAYMENT_CHILD_CLOSE_POLICY,
         )
 
     async def _send_email(self, email: str) -> None:

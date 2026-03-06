@@ -21,4 +21,3 @@ class PaymentWorkflow:
             start_to_close_timeout=CHARGE_ACTIVITY_TIMEOUT,
             retry_policy=RetryPolicy(maximum_attempts=CHARGE_ACTIVITY_MAX_ATTEMPTS),
         )
-

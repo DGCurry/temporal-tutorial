@@ -58,5 +58,3 @@ async def charge_customer(inp: ChargeInput) -> str:
 
     except asyncio.CancelledError:
         return format_charge_result(CHARGE_NOK_PREFIX, idem_key)
-
-
