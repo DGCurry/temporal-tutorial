@@ -2,7 +2,6 @@ import asyncio
 import logging
 from uuid import uuid4
 from temporalio.client import Client
-from workflows import HelloWorkflow
 
 TASK_QUEUE = "tutorial-task-queue"
 TEMPORAL_ADDRESS = "localhost:7233"
@@ -14,10 +13,11 @@ async def main() -> None:
 
     wf_id = str(uuid4())
 
-    # TODO start the workflow with client.start_workflow
-    # passing in the workflow class, 
-    # and specifying the task queue and a unique workflow id. 
-    # Store the returned handle in a variable called handle.
+    handle = await client.start_workflow(
+        "HelloWorkflow",
+        id=wf_id,
+        task_queue=TASK_QUEUE
+    )
 
     logging.info("Workflow started with id: %s", handle.id)
 

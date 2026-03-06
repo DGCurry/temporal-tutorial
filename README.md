@@ -44,10 +44,10 @@ temporal server start-dev
 
 
 ### MacOS/Linux
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+  python3 -m venv .venv
+  source .venv/bin/activate
+  python -m pip install --upgrade pip
+  pip install -r requirements.txt
 
 ### Windows Powershell
 py -3 -m venv .venv
@@ -60,4 +60,4 @@ pip install -r requirements.txt
 python worker.py
 
 # Terminal B:
-python client_demo.py
+python start.py

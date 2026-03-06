@@ -3,7 +3,7 @@ import logging
 from temporalio.client import Client
 from temporalio.worker import Worker
 from workflows import HelloWorkflow
-from activities import empty_activity
+from greeting_activity import greeting_activity
 from start import TASK_QUEUE
 
 TEMPORAL_ADDRESS = "localhost:7233"
@@ -17,7 +17,7 @@ async def main() -> None:
         client,
         task_queue=TASK_QUEUE,
         workflows=[HelloWorkflow],
-        activities=[empty_activity],
+        activities=[greeting_activity],
     )
 
     logging.info("Worker gestart; luistert op task queue: %s", TASK_QUEUE)
