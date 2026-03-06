@@ -59,8 +59,8 @@ class OrderWorkflow:
         return email
 
     @workflow.update
-    async def set_item_qty(self, sku: str, quantity: int) -> None:
-        self.state.items = updated_items_helper(self.state.items, sku, quantity)
+    async def set_item_qty(self, stock_unit_identifier: str, quantity: int) -> None:
+        self.state.items = updated_items_helper(self.state.items, stock_unit_identifier, quantity)
 
     # --- Orchestration steps: each does one thing ---
 
