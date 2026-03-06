@@ -57,7 +57,7 @@ pip install -r requirements.txt
 
 ### Run
 # Terminal A (dev‑server draait al):
-python worker.py
+python3 worker.py
 
 # Terminal B:
-python client_demo.py
+python3 client_demo.py
