@@ -60,4 +60,4 @@ pip install -r requirements.txt
 python3 worker.py
 
 # Terminal B:
-python3 client_demo.py
+python3 start.py
