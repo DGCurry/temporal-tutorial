@@ -4,7 +4,7 @@ from entities.charge_input import ChargeInput
 from temporalio import workflow
 from temporalio.common import RetryPolicy
 
-from activities import charge_customer, ChargeInput
+from activities.charge_customer import charge_customer
 
 CHARGE_ACTIVITY_TIMEOUT = timedelta(seconds=10)
 CHARGE_ACTIVITY_MAX_ATTEMPTS = 5

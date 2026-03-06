@@ -2,7 +2,7 @@
 import asyncio
 from datetime import timedelta
 from temporalio.client import Client
-from workflows import OrderWorkflow
+from workflows.order import OrderWorkflow
 
 # ---------------------------------------------------------------------------
 # Constants

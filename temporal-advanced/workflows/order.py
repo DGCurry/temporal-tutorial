@@ -7,7 +7,7 @@ from temporalio import workflow
 from temporalio.workflow import ParentClosePolicy
 
 from workflows.payment import PaymentWorkflow
-from activities import send_confirmation_email
+from activities.send_confirmation_email import send_confirmation_email
 
 
 EMAIL_ACTIVITY_TIMEOUT = timedelta(seconds=5)
