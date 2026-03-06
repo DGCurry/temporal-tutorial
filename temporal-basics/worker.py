@@ -17,7 +17,7 @@ async def main() -> None:
         client,
         task_queue=TASK_QUEUE,
         workflows=[HelloWorkflow],
-        activities=[empty_activity],
+        activities=[greeting_activity],
     )
 
     logging.info("Worker gestart; luistert op task queue: %s", TASK_QUEUE)
