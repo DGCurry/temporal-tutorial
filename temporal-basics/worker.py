@@ -3,7 +3,7 @@ import logging
 from temporalio.client import Client
 from temporalio.worker import Worker
 from workflows import HelloWorkflow
-from activities import empty_activity
+from activities import greeting_activity
 from start import TASK_QUEUE
 
 TEMPORAL_ADDRESS = "localhost:7233"
