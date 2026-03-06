@@ -1,8 +1,9 @@
 # start.py
 import asyncio
+import time
 from datetime import timedelta
 from temporalio.client import Client
-from workflows import OrderWorkflow
+from workflows.order import OrderWorkflow
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -14,7 +15,7 @@ WORKFLOW_EXECUTION_TIMEOUT = timedelta(minutes=10)
 
 # Client/order details
 CLIENT_EMAIL = "hot.man@essent.com"
-CLIENT_ORDER_ID = "ORDER-1001"
+CLIENT_ORDER_ID = f"ORDER-1001-{int(time.time())}"
 
 # Item details
 ITEM_SKU_A = "SKU-AAA"
@@ -32,8 +33,7 @@ async def main():
     # Start a workflow
     handle = await client.start_workflow(
         OrderWorkflow.run,
-        CLIENT_ORDER_ID,
-        CLIENT_EMAIL,
+        args=[CLIENT_ORDER_ID, CLIENT_EMAIL],
         id=CLIENT_ORDER_ID,
         task_queue=TASK_QUEUE,
         execution_timeout=WORKFLOW_EXECUTION_TIMEOUT,
@@ -41,8 +41,8 @@ async def main():
     print("Started workflow:", handle.id)
 
     # Update: set items
-    await handle.execute_update(OrderWorkflow.set_item_qty, ITEM_SKU_A, ITEM_SKU_A_QTY)
-    await handle.execute_update(OrderWorkflow.set_item_qty, ITEM_SKU_B, ITEM_SKU_B_QTY)
+    await handle.execute_update(OrderWorkflow.set_item_qty, args=[ITEM_SKU_A, ITEM_SKU_A_QTY])
+    await handle.execute_update(OrderWorkflow.set_item_qty, args=[ITEM_SKU_B, ITEM_SKU_B_QTY])
 
     # Query current state
     state = await handle.query(OrderWorkflow.get_state)

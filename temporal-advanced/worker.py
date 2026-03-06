@@ -4,8 +4,10 @@ import asyncio
 from temporalio.client import Client
 from temporalio.worker import Worker
 
-from workflows import OrderWorkflow, PaymentWorkflow
-from activities import charge_customer, send_confirmation_email
+from workflows.order import OrderWorkflow
+from workflows.payment import PaymentWorkflow
+from activities.charge_customer import charge_customer
+from activities.send_confirmation_email import send_confirmation_email
 
 TASK_QUEUE = "advanced-task-queue"
 ADDRESS = "localhost:7233"
